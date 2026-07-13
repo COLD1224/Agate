@@ -11,7 +11,7 @@ case "$1" in
         echo "gtrd (removes APkgs)"
         echo "help (shows commands again)"
         echo "list (shows APkg names and their download acronyms)"
-echo "made AGLT (Azure Gemstone Linux Tools/Stuff)"
+echo "made by Gemstone!"
         ;;
     inst)
         wget -4 -q -O packages.txt "https://raw.githubusercontent.com/COLD1224/AgateRepository/main/packages.txt"
@@ -51,7 +51,7 @@ echo "made AGLT (Azure Gemstone Linux Tools/Stuff)"
 	 sleep 2
          #i dont like when it when the yellow squares appear on my terminal
 	#so im doing this, and im typing this for the people who would read my files
-	#- AreuAzure from AGLT/S
+	#- AreuAzure (Owner!) from Gemstone
 	echo "removed $filename"
 	fi
 	sleep 1
