@@ -7,29 +7,65 @@ case "$1" in
         echo "Agate Package Manager"
 
         echo "commands:"
-        echo "inst (installs package)"
-        echo "rm (removes package)"
+        echo "inst (installs APkgs)"
+        echo "gtrd (removes APkgs)"
         echo "help (shows commands again)"
+        echo "list (shows APkg names and their download acronyms)"
 echo "made AGLT (Azure Gemstone Linux Tools/Stuff)"
         ;;
     inst)
-        while IFS='|' read -r id name path;
-	do
-	   if [[ "$id" == "$2" ]]; then
-		echo "Found APkg: $name"
-		echo "Path: $path"
-		url="$REPO/$path"
-		filename=$(basename "$path")
+        wget -4 -q -O packages.txt "https://raw.githubusercontent.com/COLD1224/AgateRepository/main/packages.txt"
 
-		wget -4 -O "$filename" "$url"
-	   fi
-	done < ../packages.txt
+        while IFS='|' read -r id name path;
+        do
+           if [[ "$id" == "$2" ]]; then
+                echo "Found APkg: $name"
+                echo "Path: $path"
+                sleep 1
+                echo "installing.."
+                url="$REPO/$path"
+                filename=$(basename "$path")
+
+                wget -4 -q -O "$filename" "$url"
+                echo  "installed $name!"
+                chmod +x "$filename"
+
+		sleep 2
+		rm packages.txt
+           fi
+        done < packages.txt
         ;;
-    rm)
-        # remove package
+    gtrd)
+	wget -4 -q -O packages.txt "https://raw.githubusercontent.com/COLD1224/AgateRepository/main/packages.txt"
+
+	while IFS='|' read -r idrm name path;
+	do
+	 if [[ "$idrm" == "$2" ]]; then
+		echo "Found APkg: $name"
+        	echo "Path: $path"
+	   	echo "removing.."
+	   filename=$(basename "$path")
+
+	 rm "$filename"
+	#sx
+	 sleep 2
+         #i dont like when it when the yellow squares appear on my terminal
+	#so im doing this, and im typing this for the people who would read my files
+	#- AreuAzure from AGLT/S
+	echo "removed $filename"
+	fi
+	sleep 1
+	done < packages.txt
+	sleep 1
+	rm packages.txt
+        ;;
+    list)
+        echo "APkg list:
+                azureland (al)
+                DevTooz (dtz)
+                FastStart (fs)"
         ;;
     *)
         echo "Unknown command. check 'agate help' maybe you misspelled it."
         ;;
 esac
-
