@@ -61,29 +61,44 @@ echo "made by Gemstone!"
 fi
         ;;
     gtrd)
-	wget -4 -q -O packages.txt "https://raw.githubusercontent.com/COLD1224/AgateRepository/main/packages.txt"
+    if [ -z "$2" ]; then
+        echo "Error: no package specified."
+        echo "Usage: agate gtrd <package>"
+        exit 1
+    fi
 
-	while IFS='|' read -r idrm name path;
-	do
-	 if [[ "$idrm" == "$2" ]]; then
-		echo "Found APkg: $name"
-        	echo "Path: $path"
-	   	echo "removing.."
-	   filename=$(basename "$path")
+    if ! wget -4 -q -O packages.txt "https://raw.githubusercontent.com/COLD1224/AgateRepository/main/packages.txt"; then
+        echo "Error: failed to download repository."
+        exit 1
+    fi
 
-	 rm "$filename"
-	#sx
-	 sleep 2
-         #i dont like when it when the yellow squares appear on my terminal
-	#so im doing this, and im typing this for the people who would read my files
-	#- AreuAzure (Owner!) from Gemstone
-	echo "removed $filename"
-	fi
-	sleep 1
-	done < packages.txt
-	sleep 1
-	rm packages.txt
-        ;;
+    found=false
+
+    while IFS='|' read -r idrm name path;
+    do
+        if [[ "$idrm" == "$2" ]]; then
+            found=true
+            echo "Found APkg: $name"
+            echo "Path: $path"
+            echo "removing.."
+
+            filename=$(basename "$path")
+
+            rm "$HOME/.local/bin/$filename"
+
+            sleep 2
+
+            echo "removed $filename"
+        fi
+    done < packages.txt
+
+    rm packages.txt
+
+    if [ "$found" = false ]; then
+        echo "Error: package '$2' not found."
+        exit 1
+    fi
+    ;;
     list)
         echo "APkg list:
                 azureland (al)
