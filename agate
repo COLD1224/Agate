@@ -14,11 +14,24 @@ case "$1" in
 echo "made by Gemstone!"
         ;;
     inst)
+	if [ -z "$2" ]; then
+    		echo "Error: no package specified."
+    		echo "Usage: agate inst <package>"
+    		exit 1
+	fi
         wget -4 -q -O packages.txt "https://raw.githubusercontent.com/COLD1224/AgateRepository/main/packages.txt"
+
+	if [ $? -ne 0 ]; then
+    		echo "Error: failed to download repository."
+   		exit 1
+	fi
+
+	found=false
 
         while IFS='|' read -r id name path;
         do
            if [[ "$id" == "$2" ]]; then
+		found=true
                 echo "Found APkg: $name"
                 echo "Path: $path"
                 sleep 1
@@ -26,14 +39,26 @@ echo "made by Gemstone!"
                 url="$REPO/$path"
                 filename=$(basename "$path")
 
-                wget -4 -q -O "$filename" "$url"
-                echo  "installed $name!"
-                chmod +x "$filename"
+                INSTALL="$HOME/.local/bin"
 
-		sleep 2
-		rm packages.txt
+		mkdir -p "$INSTALL"
+
+		if ! wget -4 -q -O "$INSTALL/$filename" "$url"; then
+    			echo "Error: failed to download $name."
+    			exit 1
+		fi
+
+	chmod +x "$INSTALL/$filename"
+
+	echo "installed $name!"
+
            fi
         done < packages.txt
+	rm packages.txt
+	if [ "$found" = false ]; then
+    echo "Error: package '$2' not found."
+    exit 1
+fi
         ;;
     gtrd)
 	wget -4 -q -O packages.txt "https://raw.githubusercontent.com/COLD1224/AgateRepository/main/packages.txt"
