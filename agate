@@ -116,7 +116,37 @@ fi
 
 	elif [[ "$aptanswer" == "update" ]]; then
 		sudo apt update
+    
+    elif [[ "$aptanswer" == "upgrade" ]]; then
+        sudo apt upgrade
 
+    elif [[ "$aptanswer" == "remove" ]]; then
+        echo "what do you want to remove with apt?"
+        read packageanswer
+        sudo apt remove "$packageanswer"
+
+    elif [[ "$aptanswer" == "purge" ]]; then
+        echo "what do you want to purge with apt?"
+        read packageanswer
+        sudo apt purge "$packageanswer"
+
+    elif [[ "$aptanswer" == "autoremove" ]]; then
+        sudo apt autoremove
+
+    elif [[ "$aptanswer" == "search" ]]; then
+        echo "what do you want to search with apt?"
+        read packageanswer
+        sudo apt search "$packageanswer"
+
+    elif [[ "$aptanswer" == "show" ]]; then
+        echo "what do you want to show with apt?"
+        read packageanswer
+        sudo apt show "$packageanswer"
+
+    elif [[ "$aptanswer" == "list" ]]; then
+        echo "what do you want to list with apt?"
+        read packageanswer
+        sudo apt list "$packageanswer"
 	else
 		echo "unknown apt command."
 	fi
