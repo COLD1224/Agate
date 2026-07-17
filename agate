@@ -11,6 +11,8 @@ case "$1" in
         echo "gtrd (removes APkgs)"
         echo "help (shows commands again)"
         echo "list (shows APkg names and their download acronyms)"
+	echo "apt (use apt commands (currently only install and update)"
+	echo "-ver (check the version of the agate you installed)"
 echo "made by Gemstone!"
         ;;
     inst)
@@ -99,11 +101,31 @@ fi
         exit 1
     fi
     ;;
+    -ver)
+	echo "Agate Version: v1.0.5 (Bugfix)"
+	;;
+    apt)
+	echo "what do you want to do with apt?"
+
+	read aptanswer
+
+	if [[ "$aptanswer" == "install" ]]; then
+		echo "what do you want to install with apt?"
+		read packageanswer
+		sudo apt install "$packageanswer"
+
+	elif [[ "$aptanswer" == "update" ]]; then
+		sudo apt update
+
+	else
+		echo "unknown apt command."
+	fi
+	;;
     list)
-        echo "APkg list:
-                azureland (al)
-                DevTooz (dtz)
-                FastStart (fs)"
+        echo "APkg list:"
+        echo "azureland al"
+        echo "DevTooz dtz"
+        echo "FastStart fs"
         ;;
     *)
         echo "Unknown command. check 'agate help' maybe you misspelled it."
